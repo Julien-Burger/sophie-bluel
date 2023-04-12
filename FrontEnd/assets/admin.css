@@ -1,0 +1,88 @@
+header{
+    width: 100%;
+    max-width: none;
+    display: flex;
+    flex-direction: column;
+    margin-top: 0;
+}
+
+header div:first-child{
+    display: flex;
+    min-height: 70px;
+    margin-bottom: 20px;
+    background-color: black;
+    color: white;
+    justify-content: center;
+    align-items: center;
+}
+
+#edition{
+    display: flex;
+    justify-content: space-between;
+    width: 20%;
+    margin: 0;
+}
+
+#edition div{
+    margin: 0;
+}
+
+#edition p{
+    text-align: center;
+    font-size: 18px;
+    padding-left: 5px;
+}
+
+header div button{
+    background-color: white;
+    font-size: 15px;
+    font-weight: 600;
+    border: none;
+    border-radius: 60px;
+    padding: 10px 20px;
+    cursor: pointer;
+}
+
+header div:nth-of-type(2){
+    width: 100%;
+    max-width: 1140px;
+    margin: auto;
+    display: flex;
+    justify-content: space-between;
+}
+
+.filtres{
+    display: none;
+}
+
+#portfolio h2{
+    margin-bottom: 100px;
+}
+
+.modify {
+    display: flex;
+    align-items: center;
+    width: 80%;
+    margin: auto;
+    margin-top: 15px;
+}
+
+.modify p {
+    font-size: 16px;
+    padding-left: 5px;
+}
+
+.modify p:hover {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    cursor: pointer;
+}
+
+#introduction article .modify{
+    margin: 0;
+    margin-bottom: 20px;
+}
+
+#introduction article .modify p{
+    margin-bottom: 0;
+}
