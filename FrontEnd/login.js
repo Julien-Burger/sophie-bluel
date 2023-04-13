@@ -17,7 +17,7 @@ document.querySelector("#formConnect").addEventListener("submit", async event =>
   if (data.ok) {
     document.querySelector("#error").style.display = "none";
 
-    window.location.href = "http://127.0.0.1:5500/FrontEnd/admin.html";
+    window.location.href = "http://127.0.0.1:5500/FrontEnd/index.html";
   } else {
     document.querySelector("#error").style.display = "block";
     document.querySelector("#email").value = "";

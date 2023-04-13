@@ -57,11 +57,61 @@ body {
 	font-size: 14px;
 	background-color: #FFFEF8;
 }
-header {
-	max-width: 1140px;
-	display: flex;
-	justify-content: space-between;
-	margin: 50px auto;
+
+header{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+header div:first-child{
+    display: flex;
+    min-height: 70px;
+    background-color: black;
+    color: white;
+    justify-content: center;
+    align-items: center;
+}
+
+header div:nth-of-type(2){
+    width: 100%;
+    max-width: 1140px;
+    margin: auto;
+    display: flex;
+    justify-content: space-between;
+}
+
+header div:last-child{
+    margin-top: 20px;
+}
+
+header div button{
+    background-color: white;
+    font-size: 15px;
+    font-weight: 600;
+    border: none;
+    border-radius: 60px;
+    padding: 10px 20px;
+    cursor: pointer;
+}
+
+.modify {
+    display: flex;
+    align-items: center;
+    width: 80%;
+    margin: auto;
+    margin-top: 15px;
+}
+
+.modify p {
+    font-size: 16px;
+    padding-left: 5px;
+}
+
+.modify p:hover {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    cursor: pointer;
 }
 main{
 	max-width: 1140px;
@@ -127,6 +177,15 @@ li:hover {
 
 #introduction article p {
 	margin-bottom: 0.5em;
+}
+
+#introduction article .modify{
+    margin: 0;
+    margin-bottom: 20px;
+}
+
+#introduction article .modify p{
+    margin-bottom: 0;
 }
 #portfolio h2 {
 	text-align: center;
@@ -232,3 +291,19 @@ footer nav ul {
 	cursor: pointer;
 }
 
+#edition{
+    display: flex;
+    justify-content: space-between;
+    width: 15%;
+    margin: 0;
+}
+
+#edition div{
+    margin: 0;
+}
+
+#edition p{
+    text-align: center;
+    font-size: 18px;
+    padding-left: 5px;
+}
