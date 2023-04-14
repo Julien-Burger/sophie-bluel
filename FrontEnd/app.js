@@ -1,21 +1,51 @@
 import { LoadGallery } from "./LoadGallery.js";
 
-//Request page informations
-const data = await fetch("http://localhost:5678/api/works");
-const worksData = await data.json();
+window.addEventListener("DOMContentLoaded", () => {
+  getData();
+});
 
-const data2 = await fetch("http://localhost:5678/api/categories");
-const filtersData = await data2.json();
+async function getData() {
+  try {
+    const data = await fetch("http://localhost:5678/api/works");
+    const worksData = await data.json();
 
-//Loading page informations
-let loadGallery = new LoadGallery(worksData);
+    let loadGallery = new LoadGallery(worksData);
 
-loadGallery.createProjects(...worksData);
-loadGallery.createFiltersBt(...filtersData);
+    loadGallery.createProjects(worksData);
+    loadGallery.createFiltersBt(getFilters(worksData));
+  } catch (error) {
+    alert("Server request problem!");
+  }
 
-//If admin is connected
-if (localStorage.getItem("isConnected")) {
-  showEditionUI();
+  isConnected();
+}
+
+function getFilters(worksData) {
+  let filters = [];
+  let filtersId = [];
+
+  for (let work of worksData) {
+    if (filtersId.includes(work.category.id)) continue;
+
+    filtersId.push(work.category.id);
+
+    let filter = {
+      id: work.category.id,
+      name: work.category.name,
+    };
+
+    filters.push(filter);
+  }
+
+  return filters;
+}
+
+function isConnected() {
+  if (localStorage.getItem("isConnected")) {
+    showEditionUI();
+  }
+
+  localStorage.clear();
 }
 
 function showEditionUI() {
@@ -31,5 +61,3 @@ function showEditionUI() {
 
   filters.style.display = "none";
 }
-
-localStorage.clear();

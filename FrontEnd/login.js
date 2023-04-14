@@ -1,6 +1,10 @@
-document.querySelector("#formConnect").addEventListener("submit", async event => {
+document.querySelector("#formConnect").addEventListener("submit", event => {
   event.preventDefault();
 
+  checkLogin();
+});
+
+async function checkLogin() {
   const loginInfo = {
     email: document.querySelector("#email").value,
     password: document.querySelector("#mdp").value,
@@ -25,4 +29,4 @@ document.querySelector("#formConnect").addEventListener("submit", async event =>
     document.querySelector("#email").value = "";
     document.querySelector("#mdp").value = "";
   }
-});
+}

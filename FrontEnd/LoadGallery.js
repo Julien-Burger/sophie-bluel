@@ -6,22 +6,24 @@ export class LoadGallery {
     this.filtersBt = [];
   }
 
-  createProjects(...works) {
+  createProjects(works) {
     for (let work of works) {
       const figureElement = document.createElement("figure");
       const imageElement = document.createElement("img");
       const figcaptionElement = document.createElement("figcaption");
 
       imageElement.src = work.imageUrl;
+      imageElement.alt = work.title;
       figcaptionElement.innerText = work.title;
 
       figureElement.append(imageElement, figcaptionElement);
+      figureElement.dataset.catId = work.categoryId;
 
       this.gallery.append(figureElement);
     }
   }
 
-  createFiltersBt(...filters) {
+  createFiltersBt(filters) {
     this.createFirstButton();
 
     for (let filter of filters) {
@@ -66,20 +68,16 @@ export class LoadGallery {
   }
 
   filterWorks(buttonId) {
-    const filtedWorks = [];
+    const works = document.querySelectorAll("[data-cat-id]");
 
-    this.gallery.innerHTML = "";
-
-    for (let work of this.works) {
-      if (work.categoryId === buttonId) {
-        filtedWorks.push(work);
+    for (let work of works) {
+      if (buttonId === 0) {
+        work.classList.remove("hide");
+      } else if (parseInt(work.dataset.catId) === buttonId) {
+        work.classList.remove("hide");
+      } else {
+        work.classList.add("hide");
       }
-    }
-
-    if (buttonId === 0) {
-      this.createProjects(...this.works);
-    } else {
-      this.createProjects(...filtedWorks);
     }
   }
 }
