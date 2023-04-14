@@ -189,20 +189,35 @@ li:hover {
 }
 #portfolio h2 {
 	text-align: center;
-	margin-bottom: 1em;
+	display: inline-block;
+	margin: 0;
+	margin-left: 60px;
+}
+
+#portfolio #projets {
+	display: flex;
+	justify-content: center;
+	margin-bottom: 50px;
+}
+
+#portfolio #projets .modify{
+	display: flex;
+	margin: 0;
+	width: auto;
+	padding-left: 20px;
 }
 
 .filtres {
 	margin: auto;
 	margin-bottom: 3em;
-	width: 65%;
+	width: 60%;
 	display: flex;
 	justify-content: space-around;
 }
 
 .filtersButton {
 	font-family: Syne;
-	font-size: 20px;
+	font-size: 18px;
 	border-radius: 60px;
 	padding: 10px 20px;
 	transition: all 0.3s;
@@ -216,12 +231,12 @@ li:hover {
 	cursor: pointer;
 }
 
-.filtresNotSelected {
+.NotSelectedFilter {
 	background-color: #FFFEF8;
 	color: #1D6154;
 }
 
-.filtresSelected {
+.SelectedFilter {
 	background-color: #1D6154;
 	color: white;
 }
@@ -306,4 +321,8 @@ footer nav ul {
     text-align: center;
     font-size: 18px;
     padding-left: 5px;
+}
+
+.hide{
+	display: none;
 }

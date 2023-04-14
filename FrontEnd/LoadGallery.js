@@ -1,7 +1,7 @@
-export class Works {
-  constructor(gallery, filtres, works) {
-    this.gallery = gallery;
-    this.filtres = filtres;
+export class LoadGallery {
+  constructor(works) {
+    this.gallery = document.querySelector(".gallery");
+    this.filtres = document.querySelector(".filtres");
     this.works = works;
     this.filtersBt = [];
   }
@@ -28,7 +28,7 @@ export class Works {
       const button = document.createElement("button");
 
       button.innerText = filter.name;
-      button.classList.add("filtresNotSelected", "filtersButton");
+      button.classList.add("NotSelectedFilter", "filtersButton");
       button.id = filter.id;
       this.addListenersToFiltersBt(button, filter.id);
 
@@ -41,7 +41,7 @@ export class Works {
     const button = document.createElement("button");
 
     button.innerText = "Tous";
-    button.classList.add("filtresSelected", "filtersButton");
+    button.classList.add("SelectedFilter", "filtersButton");
     button.id = 0;
     this.addListenersToFiltersBt(button, 0);
 
@@ -50,14 +50,14 @@ export class Works {
   }
 
   addListenersToFiltersBt(button, buttonId) {
-    button.addEventListener("click", event => {
+    button.addEventListener("mousedown", event => {
       for (let button of this.filtersBt) {
         if (button === event.target) {
-          button.classList.add("filtresSelected");
-          button.classList.remove("filtresNotSelected");
+          button.classList.add("SelectedFilter");
+          button.classList.remove("NotSelectedFilter");
         } else {
-          button.classList.remove("filtresSelected");
-          button.classList.add("filtresNotSelected");
+          button.classList.remove("SelectedFilter");
+          button.classList.add("NotSelectedFilter");
         }
       }
 
