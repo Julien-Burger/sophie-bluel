@@ -1,7 +1,16 @@
 import { LoadGallery } from "./LoadGallery.js";
+import { EditPanel } from "./EditPanel.js";
 
 window.addEventListener("DOMContentLoaded", () => {
   getData();
+});
+
+document.querySelector("#openEditPanel").addEventListener("mousedown", () => {
+  openEditPanel(true);
+});
+
+document.querySelector("#closeEditPanel").addEventListener("mousedown", () => {
+  openEditPanel(false);
 });
 
 async function getData() {
@@ -42,9 +51,9 @@ function getFilters(worksData) {
 
 function isConnected() {
   if (localStorage.getItem("isConnected")) {
-    showEditionUI();
   }
-
+  EditPanel.loadProjects();
+  showEditionUI();
   localStorage.clear();
 }
 
@@ -60,4 +69,8 @@ function showEditionUI() {
   edition.style.display = "flex";
 
   filters.style.display = "none";
+}
+
+function openEditPanel(open) {
+  EditPanel.openEditPanel(open);
 }
