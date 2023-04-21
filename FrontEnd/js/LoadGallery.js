@@ -7,6 +7,8 @@ export class LoadGallery {
   }
 
   createProjects(works) {
+    let i = 0;
+
     for (let work of works) {
       const figureElement = document.createElement("figure");
       const imageElement = document.createElement("img");
@@ -18,6 +20,9 @@ export class LoadGallery {
 
       figureElement.append(imageElement, figcaptionElement);
       figureElement.dataset.catId = work.categoryId;
+      figureElement.id = i;
+
+      i++;
 
       this.gallery.append(figureElement);
     }

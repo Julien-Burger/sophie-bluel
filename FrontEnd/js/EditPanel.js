@@ -123,19 +123,43 @@ export class EditPanel {
 
   static loadProjects(works) {
     const editPanelGallery = document.querySelector("#editPanelGallery");
+    let i = 0;
 
     for (let work of works) {
-      const imgElement = document.createElement("img");
-      const figureElement = document.createElement("figure");
-      const figcaptionElement = document.createElement("figcaption");
+      const img = document.createElement("img");
+      const figure = document.createElement("figure");
+      const figcaption = document.createElement("figcaption");
+      const div = document.createElement("div");
+      const trashIcon = document.createElement("img");
 
-      imgElement.src = work.imageUrl;
-      imgElement.alt = work.title;
-      figcaptionElement.innerText = "éditer";
+      img.src = work.imageUrl;
+      img.alt = work.title;
+      img.id = "picture";
+      figcaption.innerText = "éditer";
 
-      figureElement.append(imgElement, figcaptionElement);
+      trashIcon.src = "/FrontEnd/assets/icons/trash.png";
+      trashIcon.id = "trashIcon";
+      div.appendChild(trashIcon);
+      div.classList.add("trashIconContainer");
+      div.id = i;
 
-      editPanelGallery.append(figureElement);
+      div.addEventListener("mousedown", () => {
+        const galleryWorks = document.querySelectorAll("[data-cat-id]");
+        const editPanelWorks = Array.prototype.slice.call(document.querySelector("#editPanelGallery").childNodes);
+
+        for (let i = 0; i < galleryWorks.length; i++) {
+          if (galleryWorks[i].id === div.id) {
+            galleryWorks[i].remove();
+            editPanelWorks[i + 1].remove();
+          }
+        }
+      });
+
+      figure.append(img, div, figcaption);
+
+      editPanelGallery.append(figure);
+
+      i++;
     }
   }
 

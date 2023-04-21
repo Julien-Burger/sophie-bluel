@@ -424,8 +424,30 @@ footer nav ul {
 	grid-row-gap: 15px;
 }
 
-#editPanelGallery figure img{
+#editPanelGallery figure {
+	position: relative;
+}
+
+#editPanelGallery figure #picture{
 	width: 100%;
+}
+
+.trashIconContainer{
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	border-radius: 5px;
+	background-color: black;
+	position: absolute;
+	right: 5px;
+	top: 5px;
+	width: 22px;
+	height: 22px;
+	cursor: pointer;
+}
+
+#trashIcon{
+	width: 12px;
 }
 
 #editPanelGallery figure figcaption:hover{
