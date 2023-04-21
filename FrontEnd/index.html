@@ -70,9 +70,9 @@
         <section id="portfolio">
             <div id="projets">
                 <h2>Mes Projets</h2>
-                <div class="modify" style="display: none;" id="openEditPanel">
+                <div class="modify" style="display: none;">
                     <i class="fa-regular fa-pen-to-square fa-lg"></i>
-                    <p>modifier</p>
+                    <p id="openEditPanel">modifier</p>
                 </div>
             </div>
 
@@ -98,9 +98,9 @@
             </form>
         </section>
 
-        <div class="editPanel" style="display: none;">
-            <div id="firstPanel">
-                <div id="crossMark"><i class="fa-solid fa-xmark fa-xl" id="closeEditPanel"></i></div>
+        <div id="editPanel" style="display: none;">
+            <div id="firstPanel" style="display: none;">
+                <div id="crossMark"><i class="fa-solid fa-xmark fa-xl closeEditPanel"></i></div>
                 <div id="gallerySettings">
                     <h2>Galerie photo</h2>
                     <div id="editPanelGallery">
@@ -108,9 +108,43 @@
                     </div>
                     <hr>
                     <div id="addPicture">
-                        <button>Ajouter une photo</button>
+                        <button id="addPictureBt" class="editPanelButton">Ajouter une photo</button>
                         <p>Supprimer la galerie</p>
                     </div>
+                </div>
+            </div>
+
+            <div id="secondPanel" style="display: none;">
+                <div id="crossMark">
+                    <i id="return" class="fa-solid fa-arrow-left fa-xl"></i>
+                    <i class="fa-solid fa-xmark fa-xl closeEditPanel"></i>
+                </div>
+                <div id="addPictureSettings">
+                    <h2>Ajout Photo</h2>
+                    <div id="pictureFileContainer">
+                        <div class="pictureRender hide">
+                            <img src="" alt="">
+                        </div>
+
+                        <div class="selectFileSettings">
+                            <i class="fa-regular fa-image"></i>
+                            <label for="pictureFile">+ Ajouter photo</label>
+                            <input type="file" name="" id="pictureFile" accept="image/png, image/jpeg" hidden>
+                            <p>jpg, png : 4mo max</p>
+                        </div>
+                    </div>
+                    <div id="pictureTitleContainer">
+                        <label for="pictureTitle">Titre</label>
+                        <input type="text" name="pictureTitle" id="pictureTitle">
+                    </div>
+                    <div id="pictureCategoryContainer">
+                        <label for="pictureCategory">Catégorie</label>
+                        <select name="pictureCategory" id="pictureCategory">
+                            <option value="" hidden selected></option>
+                        </select>
+                    </div>
+                    <hr>
+                    <button id="validateBt" class="editPanelButton editPanelButtonOff">Valider</button>
                 </div>
             </div>
         </div>

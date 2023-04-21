@@ -1,28 +1,153 @@
 export class EditPanel {
-  static openEditPanel(open) {
-    if (!this.editPanel) this.editPanel = document.querySelector(".editPanel");
+  constructor() {
+    this.editPanel = document.querySelector("#editPanel");
+    this.firstEditPanel = document.querySelector("#firstPanel");
+    this.secondEditPanel = document.querySelector("#secondPanel");
+    this.validateBt = document.querySelector("#validateBt");
 
+    this.imgSrc;
+    this.imgTitle;
+    this.imgCategory;
+    this.imgCategoryId;
+
+    this.condition1 = false;
+    this.condition2 = false;
+    this.condition3 = false;
+
+    this.initEvents();
+  }
+
+  initEvents() {
+    document.querySelector("#openEditPanel").addEventListener("mousedown", () => {
+      this.openEditPanel(true, 0);
+    });
+
+    document.querySelector("#addPictureBt").addEventListener("mousedown", () => {
+      this.openEditPanel(true, 1);
+    });
+
+    document.querySelector("#return").addEventListener("mousedown", () => {
+      this.openEditPanel(true, 0);
+    });
+
+    document.querySelectorAll(".closeEditPanel").forEach(element => {
+      element.addEventListener("mousedown", () => {
+        this.openEditPanel(false, -1);
+      });
+    });
+
+    document.querySelector("#pictureFile").addEventListener("change", event => {
+      this.condition1 = true;
+
+      document.querySelector(".selectFileSettings").classList.add("hide");
+      document.querySelector(".pictureRender").classList.remove("hide");
+
+      let pictureSrc = event.target.value.replace("C:\\fakepath\\", "/FrontEnd/assets/images/");
+      document.querySelector(".pictureRender img").src = pictureSrc;
+
+      this.imgSrc = pictureSrc;
+
+      this.canAddPicture();
+    });
+
+    document.querySelector("#pictureTitle").addEventListener("input", event => {
+      if (event.target.value === "") this.condition2 = false;
+      else this.condition2 = true;
+
+      this.imgTitle = event.target.value;
+
+      this.canAddPicture();
+    });
+
+    document.querySelector("#pictureCategory").addEventListener("change", event => {
+      this.condition3 = true;
+
+      this.imgCategory = event.target.value;
+      this.imgCategoryId = event.target.selectedIndex;
+
+      this.canAddPicture();
+    });
+
+    document.querySelector("#validateBt").addEventListener("mousedown", () => {
+      if (this.canAddPicture()) this.addPictureToGallery();
+    });
+  }
+
+  canAddPicture() {
+    if (this.condition1 && this.condition2 && this.condition3) {
+      this.validateBt.classList.remove("editPanelButtonOff");
+
+      return true;
+    } else {
+      this.validateBt.classList.add("editPanelButtonOff");
+
+      return false;
+    }
+  }
+
+  addPictureToGallery() {
+    this.openEditPanel(false, -1);
+
+    const gallery = document.querySelector(".gallery");
+
+    const figureElement = document.createElement("figure");
+    const imageElement = document.createElement("img");
+    const figcaptionElement = document.createElement("figcaption");
+
+    imageElement.src = this.imgSrc;
+    imageElement.alt = this.imgTitle;
+    figcaptionElement.innerText = this.imgTitle;
+
+    figureElement.append(imageElement, figcaptionElement);
+    figureElement.dataset.catId = this.imgCategoryId;
+
+    gallery.append(figureElement);
+  }
+
+  openEditPanel(open, panelId) {
     if (open) {
       this.editPanel.style.display = "block";
+
+      switch (panelId) {
+        case 0:
+          this.firstEditPanel.style.display = "flex";
+          this.secondEditPanel.style.display = "none";
+          break;
+        case 1:
+          this.firstEditPanel.style.display = "none";
+          this.secondEditPanel.style.display = "flex";
+          break;
+      }
     } else this.editPanel.style.display = "none";
   }
 
-  static loadProjects() {
+  static loadProjects(works) {
     const editPanelGallery = document.querySelector("#editPanelGallery");
-    const works = document.querySelectorAll("[data-cat-id] img");
 
     for (let work of works) {
       const imgElement = document.createElement("img");
       const figureElement = document.createElement("figure");
       const figcaptionElement = document.createElement("figcaption");
 
-      imgElement.src = work.currentSrc;
-      imgElement.alt = work.alt;
+      imgElement.src = work.imageUrl;
+      imgElement.alt = work.title;
       figcaptionElement.innerText = "éditer";
 
       figureElement.append(imgElement, figcaptionElement);
 
       editPanelGallery.append(figureElement);
+    }
+  }
+
+  static loadCategory(filters) {
+    const pictureCategory = document.querySelector("#pictureCategory");
+
+    for (let filter of filters) {
+      const option = document.createElement("option");
+      option.innerText = filter.name;
+      option.id = filter.id;
+
+      pictureCategory.appendChild(option);
     }
   }
 }

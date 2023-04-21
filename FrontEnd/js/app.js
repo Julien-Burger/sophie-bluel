@@ -2,15 +2,8 @@ import { LoadGallery } from "./LoadGallery.js";
 import { EditPanel } from "./EditPanel.js";
 
 window.addEventListener("DOMContentLoaded", () => {
+  new EditPanel();
   getData();
-});
-
-document.querySelector("#openEditPanel").addEventListener("mousedown", () => {
-  openEditPanel(true);
-});
-
-document.querySelector("#closeEditPanel").addEventListener("mousedown", () => {
-  openEditPanel(false);
 });
 
 async function getData() {
@@ -22,11 +15,11 @@ async function getData() {
 
     loadGallery.createProjects(worksData);
     loadGallery.createFiltersBt(getFilters(worksData));
+
+    isConnected(worksData);
   } catch (error) {
     alert("Server request problem!");
   }
-
-  isConnected();
 }
 
 function getFilters(worksData) {
@@ -49,10 +42,11 @@ function getFilters(worksData) {
   return filters;
 }
 
-function isConnected() {
+function isConnected(worksData) {
   if (localStorage.getItem("isConnected")) {
   }
-  EditPanel.loadProjects();
+  EditPanel.loadProjects(worksData);
+  EditPanel.loadCategory(getFilters(worksData));
   showEditionUI();
   localStorage.clear();
 }
@@ -69,8 +63,4 @@ function showEditionUI() {
   edition.style.display = "flex";
 
   filters.style.display = "none";
-}
-
-function openEditPanel(open) {
-  EditPanel.openEditPanel(open);
 }
