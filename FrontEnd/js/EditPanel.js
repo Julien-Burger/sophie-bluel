@@ -71,6 +71,10 @@ export class EditPanel {
     document.querySelector("#validateBt").addEventListener("mousedown", () => {
       if (this.canAddPicture()) this.addPictureToGallery();
     });
+
+    document.querySelector("#deleteAll").addEventListener("mousedown", () => {
+      this.deleteAll();
+    });
   }
 
   canAddPicture() {
@@ -123,17 +127,16 @@ export class EditPanel {
 
   static loadProjects(works) {
     const editPanelGallery = document.querySelector("#editPanelGallery");
-    let i = 0;
 
-    for (let work of works) {
+    for (let i = 0; i < works.length; i++) {
       const img = document.createElement("img");
       const figure = document.createElement("figure");
       const figcaption = document.createElement("figcaption");
       const div = document.createElement("div");
       const trashIcon = document.createElement("img");
 
-      img.src = work.imageUrl;
-      img.alt = work.title;
+      img.src = works[i].imageUrl;
+      img.alt = works[i].title;
       img.id = "picture";
       figcaption.innerText = "éditer";
 
@@ -144,23 +147,33 @@ export class EditPanel {
       div.id = i;
 
       div.addEventListener("mousedown", () => {
-        const galleryWorks = document.querySelectorAll("[data-cat-id]");
-        const editPanelWorks = Array.prototype.slice.call(document.querySelector("#editPanelGallery").childNodes);
-
-        for (let i = 0; i < galleryWorks.length; i++) {
-          if (galleryWorks[i].id === div.id) {
-            galleryWorks[i].remove();
-            editPanelWorks[i + 1].remove();
-          }
-        }
+        this.deleteWork(div);
       });
 
       figure.append(img, div, figcaption);
 
       editPanelGallery.append(figure);
-
-      i++;
     }
+  }
+
+  static deleteWork(div) {
+    const galleryWorks = document.querySelectorAll("[data-cat-id]");
+    const editPanelWorks = document.querySelector("#editPanelGallery").childNodes;
+
+    for (let i = 0; i < galleryWorks.length; i++) {
+      if (galleryWorks[i].id === div.id) {
+        galleryWorks[i].remove();
+        editPanelWorks[i + 1].remove();
+      }
+    }
+  }
+
+  deleteAll() {
+    const gallery = document.querySelector(".gallery");
+    const editPanelGallery = document.querySelector("#editPanelGallery");
+
+    gallery.innerHTML = "";
+    editPanelGallery.innerHTML = "";
   }
 
   static loadCategory(filters) {

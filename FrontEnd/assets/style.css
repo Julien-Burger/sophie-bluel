@@ -534,6 +534,12 @@ footer nav ul {
 	justify-content: space-between;
 }
 
+#deleteAll:hover{
+	cursor: pointer;
+	text-decoration: underline;
+	text-underline-offset: 3px;
+}
+
 .hide{
 	display: none;
 }
