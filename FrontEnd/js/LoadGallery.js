@@ -6,26 +6,20 @@ export class LoadGallery {
     this.filtersBt = [];
   }
 
-  createProjects(works) {
-    let i = 0;
+  createProject(workImgUrl, workTitle, workCategory, id) {
+    const figureElement = document.createElement("figure");
+    const imageElement = document.createElement("img");
+    const figcaptionElement = document.createElement("figcaption");
 
-    for (let work of works) {
-      const figureElement = document.createElement("figure");
-      const imageElement = document.createElement("img");
-      const figcaptionElement = document.createElement("figcaption");
+    imageElement.src = workImgUrl;
+    imageElement.alt = workTitle;
+    figcaptionElement.innerText = workTitle;
 
-      imageElement.src = work.imageUrl;
-      imageElement.alt = work.title;
-      figcaptionElement.innerText = work.title;
+    figureElement.append(imageElement, figcaptionElement);
+    figureElement.dataset.catId = workCategory.id;
+    figureElement.id = id;
 
-      figureElement.append(imageElement, figcaptionElement);
-      figureElement.dataset.catId = work.categoryId;
-      figureElement.id = i;
-
-      i++;
-
-      this.gallery.append(figureElement);
-    }
+    this.gallery.append(figureElement);
   }
 
   createFiltersBt(filters) {

@@ -13,12 +13,16 @@ async function getData() {
 
     let loadGallery = new LoadGallery(worksData);
 
-    loadGallery.createProjects(worksData);
+    for (let i = 0; i < worksData.length; i++) {
+      loadGallery.createProject(worksData[i].imageUrl, worksData[i].title, worksData[i].category, i);
+    }
+
     loadGallery.createFiltersBt(getFilters(worksData));
 
     isConnected(worksData);
   } catch (error) {
     alert("Server request problem!");
+    console.alert(error);
   }
 }
 
@@ -45,7 +49,8 @@ function getFilters(worksData) {
 function isConnected(worksData) {
   if (localStorage.getItem("isConnected")) {
     EditPanel.loadProjects(worksData);
-    EditPanel.loadCategory(getFilters(worksData));
+    EditPanel.loadCategories(getFilters(worksData));
+
     showEditionUI();
   }
 

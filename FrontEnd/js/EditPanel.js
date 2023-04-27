@@ -1,3 +1,5 @@
+import { LoadGallery } from "./LoadGallery.js";
+
 export class EditPanel {
   constructor() {
     this.editPanel = document.querySelector("#editPanel");
@@ -92,20 +94,8 @@ export class EditPanel {
   addPictureToGallery() {
     this.openEditPanel(false, -1);
 
-    const gallery = document.querySelector(".gallery");
-
-    const figureElement = document.createElement("figure");
-    const imageElement = document.createElement("img");
-    const figcaptionElement = document.createElement("figcaption");
-
-    imageElement.src = this.imgSrc;
-    imageElement.alt = this.imgTitle;
-    figcaptionElement.innerText = this.imgTitle;
-
-    figureElement.append(imageElement, figcaptionElement);
-    figureElement.dataset.catId = this.imgCategoryId;
-
-    gallery.append(figureElement);
+    const loadGallery = new LoadGallery();
+    loadGallery.createProject(this.imgSrc, this.imgTitle, this.imgCategory, 11);
   }
 
   openEditPanel(open, panelId) {
@@ -168,7 +158,7 @@ export class EditPanel {
     }
   }
 
-  static loadCategory(filters) {
+  static loadCategories(filters) {
     const pictureCategory = document.querySelector("#pictureCategory");
 
     for (let filter of filters) {
