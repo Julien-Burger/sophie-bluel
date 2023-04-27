@@ -22,7 +22,7 @@ async function getData() {
     isConnected(worksData);
   } catch (error) {
     alert("Server request problem!");
-    console.alert(error);
+    console.warn(error);
   }
 }
 
@@ -47,12 +47,13 @@ function getFilters(worksData) {
 }
 
 function isConnected(worksData) {
-  if (localStorage.getItem("isConnected")) {
-  }
-  EditPanel.loadProjects(worksData);
-  EditPanel.loadCategories(getFilters(worksData));
+  if (localStorage.getItem("userId") === "1") {
+    EditPanel.loadProjects(worksData);
+    EditPanel.loadCategories(getFilters(worksData));
 
-  showEditionUI();
+    showEditionUI();
+  }
+
   localStorage.clear();
 }
 
@@ -60,6 +61,8 @@ function showEditionUI() {
   const allModify = document.querySelectorAll(".modify");
   const edition = document.querySelector("#edition").parentElement;
   const filters = document.querySelector(".filtres");
+  const login = document.querySelector("#login");
+  const logout = document.querySelector("#logout");
 
   for (let modify of allModify) {
     modify.style.display = "flex";
@@ -68,4 +71,7 @@ function showEditionUI() {
   edition.style.display = "flex";
 
   filters.style.display = "none";
+
+  login.style.display = "none";
+  logout.style.display = "block";
 }
