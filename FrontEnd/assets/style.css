@@ -309,7 +309,7 @@ footer nav ul {
 #edition{
     display: flex;
     justify-content: space-between;
-    width: 15%;
+    width: 380px;
     margin: 0;
 }
 

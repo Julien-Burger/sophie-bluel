@@ -168,14 +168,6 @@ export class EditPanel {
     }
   }
 
-  deleteAll() {
-    const gallery = document.querySelector(".gallery");
-    const editPanelGallery = document.querySelector("#editPanelGallery");
-
-    gallery.innerHTML = "";
-    editPanelGallery.innerHTML = "";
-  }
-
   static loadCategory(filters) {
     const pictureCategory = document.querySelector("#pictureCategory");
 
