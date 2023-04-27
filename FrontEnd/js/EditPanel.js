@@ -44,9 +44,9 @@ export class EditPanel {
       document.querySelector(".selectFileSettings").classList.add("hide");
       document.querySelector(".pictureRender").classList.remove("hide");
 
-      let pictureSrc = event.target.value.replace("C:\\fakepath\\", "/FrontEnd/assets/images/");
-      document.querySelector(".pictureRender img").src = pictureSrc;
+      let pictureSrc = URL.createObjectURL(event.target.files[0]);
 
+      document.querySelector(".pictureRender img").src = pictureSrc;
       this.imgSrc = pictureSrc;
 
       this.canAddPicture();

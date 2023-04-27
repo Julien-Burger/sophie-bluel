@@ -48,12 +48,11 @@ function getFilters(worksData) {
 
 function isConnected(worksData) {
   if (localStorage.getItem("isConnected")) {
-    EditPanel.loadProjects(worksData);
-    EditPanel.loadCategories(getFilters(worksData));
-
-    showEditionUI();
   }
+  EditPanel.loadProjects(worksData);
+  EditPanel.loadCategories(getFilters(worksData));
 
+  showEditionUI();
   localStorage.clear();
 }
 
