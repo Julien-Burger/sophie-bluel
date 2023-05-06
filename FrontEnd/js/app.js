@@ -2,50 +2,59 @@ import { LoadGallery } from "./LoadGallery.js";
 import { EditPanel } from "./EditPanel.js";
 
 window.addEventListener("DOMContentLoaded", () => {
-  new EditPanel();
+  new EditPanel(); //Init the edit panel constructor.
   getData();
 });
 
+/**
+ * Call the server to get the works and load the works and the filters to the gallery.
+ */
 async function getData() {
-  try {
-    const data = await fetch("http://localhost:5678/api/works");
+  const data = await fetch("http://localhost:5678/api/works");
+
+  if (data.ok) {
+    const gallery = document.querySelector(".gallery");
+    const filter = document.querySelector(".filtres");
     const worksData = await data.json();
 
-    let loadGallery = new LoadGallery(worksData);
-
-    for (let i = 0; i < worksData.length; i++) {
-      loadGallery.createProject(worksData[i].imageUrl, worksData[i].title, worksData[i].category, i);
+    for (let work of worksData) {
+      LoadGallery.createProject(work.imageUrl, work.title, work.categoryId, work.id, gallery);
     }
 
-    loadGallery.createFiltersBt(getFilters(worksData));
+    LoadGallery.createFiltersBt(getFilters(worksData), filter);
 
     isConnected(worksData);
-  } catch (error) {
-    alert("Server request problem!");
-    console.warn(error);
   }
 }
 
+/**
+ * Retrieve the filters informations base on the works data.
+ * @param {array} worksData
+ * @returns Array of objects containing filters informations.
+ */
 function getFilters(worksData) {
-  let filters = [];
-  let filtersId = [];
+  let filters = [{ id: 0, name: "Tous" }];
+  let filtersId = [0];
 
   for (let work of worksData) {
-    if (filtersId.includes(work.category.id)) continue;
-
-    filtersId.push(work.category.id);
+    if (filtersId.includes(work.categoryId)) continue;
 
     let filter = {
-      id: work.category.id,
+      id: work.categoryId,
       name: work.category.name,
     };
 
+    filtersId.push(work.categoryId);
     filters.push(filter);
   }
 
   return filters;
 }
 
+/**
+ * Check whatever the user admin is connected.
+ * @param {array} worksData
+ */
 function isConnected(worksData) {
   if (localStorage.getItem("userId") === "1") {
     EditPanel.loadProjects(worksData);
@@ -53,10 +62,11 @@ function isConnected(worksData) {
 
     showEditionUI();
   }
-
-  localStorage.clear();
 }
 
+/**
+ * Show elements of the edition mode.
+ */
 function showEditionUI() {
   const allModify = document.querySelectorAll(".modify");
   const edition = document.querySelector("#edition").parentElement;

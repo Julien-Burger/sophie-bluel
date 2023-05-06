@@ -1,81 +1,106 @@
+/**
+ * Load and filter all works contained on the server.
+ */
 export class LoadGallery {
-  constructor(works) {
-    this.gallery = document.querySelector(".gallery");
-    this.filtres = document.querySelector(".filtres");
-    this.works = works;
-    this.filtersBt = [];
-  }
-
-  createProject(workImgUrl, workTitle, workCategory, id) {
+  /**
+   * Create a project and appending it to the HTML element selected.
+   * @param {string} imgUrl Image source of the project.
+   * @param {string} title Title of the project display under the image.
+   * @param {number} categoryId Use to filter the work.
+   * @param {number} workId Use to delete the work.
+   * @param {HTMLElement} parentElement HTML element to append the project.
+   */
+  static createProject(imgUrl, title, categoryId, workId, parentElement) {
     const figureElement = document.createElement("figure");
     const imageElement = document.createElement("img");
     const figcaptionElement = document.createElement("figcaption");
 
-    imageElement.src = workImgUrl;
-    imageElement.alt = workTitle;
-    figcaptionElement.innerText = workTitle;
+    imageElement.src = imgUrl;
+    imageElement.alt = title;
+    figcaptionElement.innerText = title;
 
     figureElement.append(imageElement, figcaptionElement);
-    figureElement.dataset.catId = workCategory.id;
-    figureElement.id = id;
+    figureElement.dataset.catId = categoryId;
+    figureElement.dataset.workId = workId;
 
-    this.gallery.append(figureElement);
+    parentElement.append(figureElement);
   }
 
-  createFiltersBt(filters) {
-    this.createFirstButton();
-
+  /**
+   * Create filter and append it to the HTML element selected.
+   * @param {Array} filters Array of objects containing filter data.
+   * @param {HTMLElement} parentElement HTML element to append the filter.
+   */
+  static createFiltersBt(filters, parentElement) {
     for (let filter of filters) {
       const button = document.createElement("button");
 
       button.innerText = filter.name;
-      button.classList.add("NotSelectedFilter", "filtersButton");
-      button.id = filter.id;
-      this.addListenersToFiltersBt(button, filter.id);
+      button.dataset.filterId = filter.id;
 
-      this.filtersBt.push(button);
-      this.filtres.append(button);
+      if (filter.name === "Tous") button.classList.add("SelectedFilter", "filtersButton");
+      else button.classList.add("NotSelectedFilter", "filtersButton");
+
+      parentElement.append(button);
+    }
+
+    this.addFiltersEventListener();
+  }
+
+  /**
+   * Add event listener to all filter buttons.
+   */
+  static addFiltersEventListener() {
+    const filterBts = document.querySelectorAll("[data-filter-id]");
+
+    for (let filterBt of filterBts) {
+      filterBt.addEventListener("mousedown", () => {
+        this.filterWorks(filterBt.dataset.filterId, filterBts);
+      });
     }
   }
 
-  createFirstButton() {
-    const button = document.createElement("button");
-
-    button.innerText = "Tous";
-    button.classList.add("SelectedFilter", "filtersButton");
-    button.id = 0;
-    this.addListenersToFiltersBt(button, 0);
-
-    this.filtersBt.push(button);
-    this.filtres.append(button);
+  /**
+   * Filter all works by the button id pass as parameter.
+   * @param {number} buttonId Id of the button pressed.
+   * @param {array} filterBts All HTML filter buttons elements.
+   */
+  static filterWorks(buttonId, filterBts) {
+    this.showHideWorks(buttonId);
+    this.changeFiltersUI(buttonId, filterBts);
   }
 
-  addListenersToFiltersBt(button, buttonId) {
-    button.addEventListener("mousedown", event => {
-      for (let button of this.filtersBt) {
-        if (button === event.target) {
-          button.classList.add("SelectedFilter");
-          button.classList.remove("NotSelectedFilter");
-        } else {
-          button.classList.remove("SelectedFilter");
-          button.classList.add("NotSelectedFilter");
-        }
-      }
-
-      this.filterWorks(buttonId);
-    });
-  }
-
-  filterWorks(buttonId) {
+  /**
+   * Show / hide works base on the button id pass as parameter.
+   * @param {number} buttonId Id of the button pressed.
+   */
+  static showHideWorks(buttonId) {
     const works = document.querySelectorAll("[data-cat-id]");
 
     for (let work of works) {
-      if (buttonId === 0) {
+      if (parseInt(buttonId) === 0) {
         work.classList.remove("hide");
-      } else if (parseInt(work.dataset.catId) === buttonId) {
+      } else if (work.dataset.catId === buttonId) {
         work.classList.remove("hide");
       } else {
         work.classList.add("hide");
+      }
+    }
+  }
+
+  /**
+   * Switch CSS class on all buttons.
+   * @param {number} buttonId Id of the button pressed.
+   * @param {array} filtersBt All HTML filter buttons elements.
+   */
+  static changeFiltersUI(buttonId, filtersBt) {
+    for (let filterBt of filtersBt) {
+      if (filterBt.dataset.filterId === buttonId) {
+        filterBt.classList.add("SelectedFilter");
+        filterBt.classList.remove("NotSelectedFilter");
+      } else {
+        filterBt.classList.remove("SelectedFilter");
+        filterBt.classList.add("NotSelectedFilter");
       }
     }
   }

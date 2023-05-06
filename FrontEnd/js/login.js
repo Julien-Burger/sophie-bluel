@@ -20,6 +20,7 @@ async function checkLogin() {
     });
 
     const response = await data.json();
+
     localStorage.setItem("userId", response.userId);
     localStorage.setItem("token", response.token);
 

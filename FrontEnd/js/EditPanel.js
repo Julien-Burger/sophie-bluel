@@ -1,5 +1,8 @@
 import { LoadGallery } from "./LoadGallery.js";
 
+/**
+ *
+ */
 export class EditPanel {
   constructor() {
     this.editPanel = document.querySelector("#editPanel");
@@ -9,7 +12,6 @@ export class EditPanel {
 
     this.imgSrc;
     this.imgTitle;
-    this.imgCategory;
     this.imgCategoryId;
 
     this.condition1 = false;
@@ -19,19 +21,26 @@ export class EditPanel {
     this.initEvents();
   }
 
+  /**
+   * Initialize all "addEventListener".
+   */
   initEvents() {
+    //Open the first panel (edit gallery).
     document.querySelector("#openEditPanel").addEventListener("mousedown", () => {
       this.openEditPanel(true, 0);
     });
 
+    //Open the second panel (add picture).
     document.querySelector("#addPictureBt").addEventListener("mousedown", () => {
       this.openEditPanel(true, 1);
     });
 
+    //Return back to the first panel.
     document.querySelector("#return").addEventListener("mousedown", () => {
       this.openEditPanel(true, 0);
     });
 
+    //Close edit panel.
     document.querySelectorAll(".closeEditPanel").forEach(element => {
       element.addEventListener("mousedown", () => {
         this.openEditPanel(false, -1);
@@ -47,7 +56,8 @@ export class EditPanel {
       let pictureSrc = URL.createObjectURL(event.target.files[0]);
 
       document.querySelector(".pictureRender img").src = pictureSrc;
-      this.imgSrc = pictureSrc;
+
+      this.imgSrc = event.target.files[0];
 
       this.canAddPicture();
     });
@@ -64,7 +74,6 @@ export class EditPanel {
     document.querySelector("#pictureCategory").addEventListener("change", event => {
       this.condition3 = true;
 
-      this.imgCategory = event.target.value;
       this.imgCategoryId = event.target.selectedIndex;
 
       this.canAddPicture();
@@ -73,12 +82,12 @@ export class EditPanel {
     document.querySelector("#validateBt").addEventListener("mousedown", () => {
       if (this.canAddPicture()) this.addPictureToGallery();
     });
-
-    document.querySelector("#deleteAll").addEventListener("mousedown", () => {
-      this.deleteAll();
-    });
   }
 
+  /**
+   * Check if the conditions are validate to add a work.
+   * @returns True if the 3 inputs are fill. Otherwise false.
+   */
   canAddPicture() {
     if (this.condition1 && this.condition2 && this.condition3) {
       this.validateBt.classList.remove("editPanelButtonOff");
@@ -91,13 +100,40 @@ export class EditPanel {
     }
   }
 
-  addPictureToGallery() {
-    this.openEditPanel(false, -1);
+  /**
+   * Call the server to add the picture settings to the data base.
+   */
+  async addPictureToGallery() {
+    this.openEditPanel(false, -1); //Close edit panel.
 
-    const loadGallery = new LoadGallery();
-    loadGallery.createProject(this.imgSrc, this.imgTitle, this.imgCategory, 11);
+    const formData = new FormData();
+
+    formData.append("image", this.imgSrc);
+    formData.append("title", this.imgTitle);
+    formData.append("category", this.imgCategoryId);
+
+    const request = await fetch("http://localhost:5678/api/works", {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        Authorization: `Bearer ${localStorage.getItem("token")}`, //Check if admin is connected
+      },
+      body: formData,
+    });
+
+    if (request.ok) {
+      const response = await request.json();
+      localStorage.setItem("response", JSON.stringify(response));
+
+      LoadGallery.createProject(response.imageUrl, response.title, response.categoryId, response.id);
+    }
   }
 
+  /**
+   * Open / close the panel you pass in parameter.
+   * @param {boolean} open True = open / False = close.
+   * @param {number} panelId 0 = edit panel / 1 = add panel.
+   */
   openEditPanel(open, panelId) {
     if (open) {
       this.editPanel.style.display = "block";
@@ -115,49 +151,65 @@ export class EditPanel {
     } else this.editPanel.style.display = "none";
   }
 
+  /**
+   * Load all works to the edit panel.
+   * @param {array} works All works to load.
+   */
   static loadProjects(works) {
     const editPanelGallery = document.querySelector("#editPanelGallery");
 
-    for (let i = 0; i < works.length; i++) {
+    for (let work of works) {
       const img = document.createElement("img");
       const figure = document.createElement("figure");
       const figcaption = document.createElement("figcaption");
       const div = document.createElement("div");
       const trashIcon = document.createElement("img");
 
-      img.src = works[i].imageUrl;
-      img.alt = works[i].title;
-      img.id = "picture";
+      img.src = work.imageUrl;
+      img.alt = work.title;
+      img.id = "picture"; //css style
       figcaption.innerText = "éditer";
 
       trashIcon.src = "/FrontEnd/assets/icons/trash.png";
       trashIcon.id = "trashIcon";
       div.appendChild(trashIcon);
       div.classList.add("trashIconContainer");
-      div.id = i;
 
       div.addEventListener("mousedown", () => {
-        this.deleteWork(div);
+        this.deleteWork(work.id);
       });
 
       figure.append(img, div, figcaption);
+      figure.dataset.workId = work.id;
 
       editPanelGallery.append(figure);
     }
   }
 
-  static deleteWork(div) {
-    const galleryWorks = document.querySelectorAll("[data-cat-id]");
-    const editPanelWorks = document.querySelector("#editPanelGallery").childNodes;
+  /**
+   * Call the server to delete a work.
+   * @param {number} workId Work id to delete.
+   */
+  static async deleteWork(workId) {
+    const request = await fetch(`http://localhost:5678/api/works/${workId}`, {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`, //Check if admin is connected
+      },
+    });
 
-    for (let i = 0; i < galleryWorks.length; i++) {
-      if (galleryWorks[i].id === div.id) {
-        galleryWorks[i].remove();
-        editPanelWorks[i + 1].remove();
-      }
+    if (request.ok) {
+      const works = document.querySelectorAll(`[data-work-id="${workId}"]`);
+
+      works[0].remove();
+      works[1].remove();
     }
   }
 
+  /**
+   * Create a HTML option element for each filter in parameter.
+   * @param {Array} filters All filters name.
+   */
   static loadCategories(filters) {
     const pictureCategory = document.querySelector("#pictureCategory");
 
