@@ -178,24 +178,39 @@ export class EditPanel {
             const img = document.createElement("img");
             const figure = document.createElement("figure");
             const figcaption = document.createElement("figcaption");
-            const div = document.createElement("div");
-            const trashIcon = document.createElement("img");
+            const trashDiv = document.createElement("div");
+            const trashIcon = document.createElement("i");
+            const moveDiv = document.createElement("div");
+            const moveIcon = document.createElement("i");
 
             img.src = work.imageUrl;
             img.alt = work.title;
             img.id = "picture"; //css style
             figcaption.innerText = "éditer";
 
-            trashIcon.src = "/FrontEnd/assets/icons/trash.png";
-            trashIcon.id = "trashIcon";
-            div.appendChild(trashIcon);
-            div.classList.add("trashIconContainer");
+            figcaption.addEventListener("mousedown", () => {
+                alert("Fonctionalité en cours de développement.")
+            })
 
-            div.addEventListener("mousedown", () => {
+            trashIcon.classList.add("fa-solid", "fa-sm", "fa-trash-can")
+            trashIcon.id = "trashIcon";
+            trashDiv.appendChild(trashIcon);
+            trashDiv.classList.add("trashIconContainer");
+
+            trashDiv.addEventListener("mousedown", () => {
                 this.deleteWork(work.id);
             });
 
-            figure.append(img, div, figcaption);
+            moveIcon.classList.add("fa-solid", "fa-sm", "fa-maximize");
+            moveIcon.id = "moveIcon";
+            moveDiv.appendChild(moveIcon);
+            moveDiv.classList.add("moveIconContainer");
+
+            moveDiv.addEventListener("mousedown", () => {
+                alert("Fonctionalité en cours de développement.")
+            });
+
+            figure.append(img, trashDiv, moveDiv, figcaption);
             figure.dataset.workId = work.id;
 
             editPanelGallery.append(figure);

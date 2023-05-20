@@ -404,7 +404,7 @@ footer nav ul {
 }
 
 #editPanel {
-    padding-top: 200px;
+    padding-top: 120px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -519,7 +519,8 @@ footer nav ul {
     width: 100%;
 }
 
-.trashIconContainer {
+.trashIconContainer,
+.moveIconContainer {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -533,8 +534,18 @@ footer nav ul {
     cursor: pointer;
 }
 
-#trashIcon {
-    width: 12px;
+.moveIconContainer {
+    display: none;
+    right: 35px;
+}
+
+#trashIcon,
+#moveIcon {
+    color: white;
+}
+
+[data-work-id]:hover .moveIconContainer{
+    display: flex;
 }
 
 #editPanelGallery figure figcaption:hover {

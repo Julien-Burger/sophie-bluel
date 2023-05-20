@@ -3,7 +3,10 @@ import { EditPanel } from "./EditPanel.js";
 
 window.addEventListener("DOMContentLoaded", () => {
   new EditPanel(); //Init the edit panel constructor.
+
   getData();
+
+  login();
 });
 
 /**
@@ -72,7 +75,7 @@ function showEditionUI() {
   const edition = document.querySelector("#edition").parentElement;
   const filters = document.querySelector(".filtres");
   const login = document.querySelector("#login");
-  const logout = document.querySelector("#logout");
+  const loginText = document.querySelector("#login li");
 
   for (let modify of allModify) {
     modify.style.display = "flex";
@@ -82,6 +85,18 @@ function showEditionUI() {
 
   filters.style.display = "none";
 
-  login.style.display = "none";
-  logout.style.display = "block";
+  login.href = "index.html";
+  loginText.innerText = "logout";
+}
+
+/**
+ * Check if the admin is loged in and if he is just remove connection items from the local storage
+ */
+function login(){
+  document.querySelector("#login").addEventListener("mousedown", event => {
+    if (event.target.innerText === "logout") {
+      localStorage.removeItem("userId");
+      localStorage.removeItem("token");
+    }
+  });
 }
