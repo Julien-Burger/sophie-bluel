@@ -16,12 +16,11 @@ async function getData() {
   const data = await fetch("http://localhost:5678/api/works");
 
   if (data.ok) {
-    const gallery = document.querySelector(".gallery");
     const filter = document.querySelector(".filtres");
     const worksData = await data.json();
 
     for (let work of worksData) {
-      LoadGallery.createProject(work.imageUrl, work.title, work.categoryId, work.id, gallery);
+      LoadGallery.createProject(work.imageUrl, work.title, work.categoryId, work.id);
     }
 
     LoadGallery.createFiltersBt(getFilters(worksData), filter);
@@ -60,7 +59,10 @@ function getFilters(worksData) {
  */
 function isConnected(worksData) {
   if (localStorage.getItem("userId") === "1") {
-    EditPanel.loadProjects(worksData);
+    for (let work of worksData) {
+      EditPanel.loadProjects(work);
+    }
+    
     EditPanel.loadCategories(getFilters(worksData));
 
     showEditionUI();

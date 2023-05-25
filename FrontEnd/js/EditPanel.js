@@ -73,12 +73,12 @@ export class EditPanel {
         document.querySelector("#pictureCategory").addEventListener("change", event => {
             this.condition3 = true;
 
-            this.imgCategoryId = event.target.selectedIndex;
+            this.imgCategoryId = event.target.value;
 
             this.canAddPicture();
         });
 
-        document.querySelector("#validateBt").addEventListener("mousedown", () => {
+        this.validateBt.addEventListener("mousedown", () => {
             if (this.canAddPicture()) this.addPictureToGallery();
         });
 
@@ -108,10 +108,12 @@ export class EditPanel {
     canAddPicture() {
         if (this.condition1 && this.condition2 && this.condition3) {
             this.validateBt.classList.remove("editPanelButtonOff");
+            this.validateBt.removeAttribute("disabled");
 
             return true;
         } else {
             this.validateBt.classList.add("editPanelButtonOff");
+            this.validateBt.setAttribute("disabled", "");
 
             return false;
         }
@@ -140,9 +142,31 @@ export class EditPanel {
 
         if (request.ok) {
             const response = await request.json();
-
+            console.log(response.id);
             LoadGallery.createProject(response.imageUrl, response.title, response.categoryId, response.id);
+            EditPanel.loadProjects(response);
+
+            this.clearInputs();
         }
+    }
+
+    /**
+     * Clear inputs on the add picture modal
+     */
+    clearInputs(){
+        document.querySelector("#pictureFile").value = "";
+        document.querySelector(".selectFileSettings").classList.remove("hide");
+        document.querySelector(".pictureRender").classList.add("hide");
+
+        document.querySelector("#pictureTitle").value = "";
+
+        document.querySelector("#pictureCategory").options[0].selected = true;
+
+        this.condition1 = false;
+        this.condition2 = false;
+        this.condition3 = false;
+
+        this.canAddPicture();
     }
 
     /**
@@ -169,13 +193,12 @@ export class EditPanel {
 
     /**
      * Load all works to the edit panel.
-     * @param {array} works All works to load.
+     * @param {array} work All works to load.
      */
-    static loadProjects(works) {
+    static loadProjects(work) {
         const editPanelGallery = document.querySelector("#editPanelGallery");
 
-        for (let work of works) {
-            const img = document.createElement("img");
+        const img = document.createElement("img");
             const figure = document.createElement("figure");
             const figcaption = document.createElement("figcaption");
             const trashDiv = document.createElement("div");
@@ -214,7 +237,6 @@ export class EditPanel {
             figure.dataset.workId = work.id;
 
             editPanelGallery.append(figure);
-        }
     }
 
     /**
@@ -245,9 +267,11 @@ export class EditPanel {
         const pictureCategory = document.querySelector("#pictureCategory");
 
         for (let filter of filters) {
+            if (filter.id === 0) continue;
+
             const option = document.createElement("option");
             option.innerText = filter.name;
-            option.id = filter.id;
+            option.value = filter.id;
 
             pictureCategory.appendChild(option);
         }

@@ -8,9 +8,9 @@ export class LoadGallery {
    * @param {string} title Title of the project display under the image.
    * @param {number} categoryId Use to filter the work.
    * @param {number} workId Use to delete the work.
-   * @param {HTMLElement} parentElement HTML element to append the project.
    */
-  static createProject(imgUrl, title, categoryId, workId, parentElement) {
+  static createProject(imgUrl, title, categoryId, workId) {
+    const gallery = document.querySelector(".gallery");
     const figureElement = document.createElement("figure");
     const imageElement = document.createElement("img");
     const figcaptionElement = document.createElement("figcaption");
@@ -23,7 +23,7 @@ export class LoadGallery {
     figureElement.dataset.catId = categoryId;
     figureElement.dataset.workId = workId;
 
-    parentElement.append(figureElement);
+    gallery.append(figureElement);
   }
 
   /**
